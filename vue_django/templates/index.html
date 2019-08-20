@@ -1,0 +1,167 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" rel="stylesheet"/>
+
+</head>
+<body>
+<div class="container" id="main_vue">
+        <button type="button" class="btn btn-primary mt-5 mb-5 float-right" data-toggle="modal" data-target="#exampleModal">
+          Add New Student
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add New Student</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form @submit.prevent="formSubmit($event)">
+
+                      <div class="form-group">
+                        <label for="exampleInputEmail1">Name</label>
+                        <input type="text" v-model="Crud.name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                        <small id="emailHelp" class="form-text text-danger" v-text="errors.get('name')"></small>
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleInputPassword1">Roll</label>
+                        <input type="text" v-model="Crud.roll"  class="form-control" id="exampleInputPassword1" placeholder="Roll">
+                        <small id="emailHelp" class="form-text text-danger" v-text="errors.get('roll')"></small>
+                      </div>
+                      <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" @click="ClearData()"  class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="modal fade" id="exampleModalTwo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add New Student</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form @submit.prevent="UpdateSubmit($event)">
+
+                      <div class="form-group">
+                        <label for="exampleInputEmail1">Name</label>
+                        <input type="text" v-model="EditCrud.name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                        <small id="emailHelp" class="form-text text-danger" v-text="errors.get('name')"></small>
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleInputPassword1">Roll</label>
+                        <input type="text" v-model="EditCrud.roll"  class="form-control" id="exampleInputPassword1" placeholder="Roll">
+                        <small id="emailHelp" class="form-text text-danger" v-text="errors.get('roll')"></small>
+                      </div>
+                      <button type="submit" class="btn btn-primary">Update</button>
+                    </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" @click="ClearData()"  class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="modal fade" id="ViewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" v-text="ViewCrud.name + ' ' + ' Details'"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <table class="table table-striped">
+                        <tr>
+                            <td>Name : </td>
+                            <td v-text="ViewCrud.name"></td>
+                        </tr>
+                         <tr>
+                            <td>Roll : </td>
+                            <td v-text="ViewCrud.roll"></td>
+                        </tr>
+                        <tr>
+                            <td>Created At : </td>
+                            <td v-text="ViewCrud.created_at"></td>
+                        </tr>
+                        <tr>
+                            <td>Updated At : </td>
+                            <td v-text="ViewCrud.updated_at"></td>
+                        </tr>
+                    </table>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+<table class="table table-striped" style="margin-top: 5px;">
+  <thead>
+    <tr><input class="form-control" v-model="search"/></tr>
+    <tr>
+      <th scope="col">Sl</th>
+      <th scope="col">Name</th>
+      <th scope="col">Roll</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr v-if="AllData.length > 0" v-for="(data, index) in filteredList">
+      <th scope="row" v-text="index+1"></th>
+      <td v-text="data.name"></td>
+      <td v-text="data.roll"></td>
+      <td>
+        <button class="btn btn-danger" @click="Delete(index,data.id)">Delete</button>
+        <button class="btn btn-info" @click="Edit(index,data)">Edit</button>
+        <button class="btn btn-primary"  @click="View(index,data)">View</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="{% static 'js/vue.min.js' %}"></script>
+<script src="{% static 'js/error.js' %}"></script>
+<script type="text/javascript">
+var csrf='{{ csrf_token }}';
+</script>
+<script src="{% static 'js/crud.js' %}"></script>
+
+
+
+
+
+</body>
+</html>
